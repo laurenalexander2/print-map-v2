@@ -1,7 +1,8 @@
 # Print Map (AIC Prints) — v2
 
-A local-run, NFT-style visual map of **Art Institute of Chicago prints**, rendered as a dense, non-overlapping wall of thumbnails arranged by **textual similarity** and streamed directly from AIC’s IIIF servers.
+A local-run, NFT-style visual map of **Art Institute of Chicago prints**, rendered as a dense, non-overlapping wall of thumbnails arranged by **similarity** and streamed directly from AIC’s IIIF servers.
 
+https://print-map.vercel.app/
 This project is intentionally split into **two decoupled parts**:
 
 1. **A dataset builder** that produces a single `points.json`
