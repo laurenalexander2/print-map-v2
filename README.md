@@ -53,8 +53,8 @@ The frontend only reads static JSON.
 All thumbnails and detail images are streamed from **AIC IIIF** endpoints.  
 Only URLs are stored in `points.json`.
 
-### 3. Text-first layout (v1)
-v1 uses **text embeddings only** (title, artist, medium, date, origin).  
+### 3. Text-first layout (v2)
+v2 uses **text embeddings only** (title, artist, medium, date, origin).  
 Image embeddings are deferred to v3.  
 The UI automatically disables Visual mode when unavailable.
 
@@ -173,7 +173,7 @@ Open the printed local URL (usually `http://localhost:5173`).
 
 ---
 
-## Expected behavior (v1)
+## Expected behavior (v2)
 
 - Dense wall of touching thumbnails
 - No overlaps
