@@ -1,5 +1,5 @@
-# Print Map (AIC Prints) — v2 https://print-map.vercel.app/
-
+# Print Map (AIC Prints) — v2 
+#Check it out -> https://print-map.vercel.app/
 A local-run, NFT-style visual map of **Art Institute of Chicago prints**, rendered as a dense, non-overlapping wall of thumbnails arranged by **similarity** and streamed directly from AIC’s IIIF servers.
 
 This project is intentionally split into **two decoupled parts**:
