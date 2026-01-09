@@ -2,7 +2,9 @@
 
 Check it out -> https://print-map.vercel.app/
 
-Code (reach out if you want permission to view): https://drive.google.com/drive/folders/1cQR2dP4bL_aVMTDX9bBd4297sHz9a5r7?usp=drive_link
+Code: https://drive.google.com/drive/folders/1cQR2dP4bL_aVMTDX9bBd4297sHz9a5r7?usp=drive_link
+
+(Intentionally restricted! Let me know if you want perms)
 
 A local-run, NFT-style visual map of **Art Institute of Chicago prints**, rendered as a dense, non-overlapping wall of thumbnails arranged by **similarity** and streamed directly from AIC’s IIIF servers.
 
