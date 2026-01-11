@@ -4,9 +4,148 @@ Check it out -> https://print-map.vercel.app/
 
 Code: https://drive.google.com/drive/folders/1cQR2dP4bL_aVMTDX9bBd4297sHz9a5r7?usp=drive_link
 
-(Intentionally restricted! Let me know if you want perms)
+## From artwork to position on the map (semantic → spatial pipeline)
 
-A local-run, NFT-style visual map of **Art Institute of Chicago prints**, rendered as a dense, non-overlapping wall of thumbnails arranged by **similarity** and streamed directly from AIC’s IIIF servers.
+Every print rendered on the map passes through **four representational stages**. Each stage deliberately changes *what information is preserved* and *what is discarded* in order to make the next stage possible.
+
+```
+Artwork metadata
+   ↓
+Natural-language string
+   ↓
+512-dimensional semantic vector
+   ↓
+2-dimensional manifold (UMAP)
+   ↓
+Discrete grid position (renderable layout)
+```
+
+Understanding this pipeline is essential to understanding what the map does — and what it does *not* do.
+
+---
+
+### 1. Artwork → natural language (semantic surface)
+
+Each artwork is first reduced to a single, ordered text string:
+
+```
+"{title}. {artist}. {medium}. {date}. {origin}."
+```
+
+This string is the **only semantic input** to the system.
+
+Design intent:
+
+* It encodes meaning using human language rather than hand-engineered features.
+* Field order is fixed so the model sees consistent structure.
+* Missing fields are omitted to avoid injecting noise.
+* The string is intentionally concise; verbosity does not improve semantic geometry.
+
+At this stage, the artwork exists purely as **language**, with no notion of distance, similarity, or layout.
+
+---
+
+### 2. Natural language → 512-dimensional vector (semantic geometry)
+
+The text string is passed through the **CLIP text encoder**, producing a vector in ℝ⁵¹².
+
+This step is often the most opaque, but conceptually it does one thing:
+
+> It embeds the *meaning* of the sentence into a high-dimensional space where semantic similarity corresponds to geometric proximity.
+
+Key properties of this space:
+
+* Individual dimensions have **no human-interpretable meaning**.
+* Meaning is distributed across all 512 dimensions.
+* Two vectors being close (high cosine similarity) means the texts are conceptually similar, even if they share no words.
+* Medium, era, artist, subject matter, and tone all influence position simultaneously.
+
+This is not classification and not clustering.
+It is **continuous semantic geometry**.
+
+After this step:
+
+* Every artwork is a point in a dense semantic field.
+* Local neighborhoods are meaningful.
+* The space is impossible to visualize or render directly.
+
+This vector space is the **semantic ground truth** of the system.
+
+---
+
+### 3. 512-D → 2-D (manifold projection with UMAP)
+
+UMAP projects the 512-dimensional semantic space into two dimensions.
+
+What UMAP preserves:
+
+* **Local relationships**: points that were near each other in 512-D tend to remain near in 2-D.
+* Neighborhood structure and cluster coherence.
+
+What UMAP discards:
+
+* Absolute distances
+* Global geometry
+* Metric interpretability
+
+Important consequence:
+
+> The 2-D output should be read as a **topological surface**, not a precise map.
+
+UMAP answers only one question:
+
+* “Which works are semantically close to each other?”
+
+It does not solve layout problems such as overlap, spacing, or visual readability.
+
+The result is a **continuous semantic manifold**, not a renderable layout.
+
+---
+
+### 4. 2-D → grid position (discrete, renderable layout)
+
+UMAP coordinates overlap heavily when thousands of points are rendered.
+
+To make the map usable, the system converts the 2-D manifold into a **dense, overlap-free grid**:
+
+1. UMAP coordinates are normalized to a unit square.
+2. Each point is assigned a **Morton (Z-order) index**, which linearizes 2-D space while preserving locality.
+3. Points are sorted by this index.
+4. They are assigned sequentially to grid cells.
+
+This step:
+
+* eliminates overlaps,
+* guarantees deterministic placement,
+* preserves local semantic continuity,
+* sacrifices global geometric meaning.
+
+The result is not a faithful geometric projection of UMAP.
+It is a **space-filling ordering of semantic similarity**.
+
+---
+
+### What the map actually represents
+
+When a user pans the map, they are not navigating raw UMAP space.
+
+They are navigating a **discrete tiling** whose adjacency relationships were induced by semantic similarity in language space.
+
+Two prints are neighbors on the screen because:
+
+* their textual descriptions were close in 512-D semantic space,
+* that proximity survived UMAP,
+* and their relative order was preserved by the space-filling curve.
+
+This chain of transformations is what allows the frontend to remain:
+
+* static,
+* deterministic,
+* backend-free,
+* and scalable to tens of thousands of works.
+
+---
+
 
 This project is intentionally split into **two decoupled parts**:
 
