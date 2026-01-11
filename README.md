@@ -2,7 +2,7 @@
 
 Check it out -> https://print-map.vercel.app/
 
-Code: https://drive.google.com/drive/folders/1cQR2dP4bL_aVMTDX9bBd4297sHz9a5r7?usp=drive_link
+Code (too big for github): https://drive.google.com/drive/folders/1cQR2dP4bL_aVMTDX9bBd4297sHz9a5r7?usp=drive_link
 
 ## From artwork to position on the map (semantic → spatial pipeline)
 
